@@ -8,6 +8,3 @@ install:
 
 run:
 	./venv/Scripts/python ./src/main.py
-
-run-dev:
-	./venv/Scripts/python -m uvicorn app.main:app --reload
