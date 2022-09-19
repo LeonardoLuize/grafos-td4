@@ -1,10 +1,10 @@
 setup:
 	python3 -m venv venv
-	./venv/Scripts/pip install --upgrade pip
+	./venv/bin/pip install --upgrade pip
 	make install
 	
 install:
-	./venv/Scripts/pip install -r requirements.txt
+	./venv/bin/pip install -r requirements.txt
 
 run:
-	./venv/Scripts/python ./src/main.py
+	./venv/bin/python ./src/main.py
