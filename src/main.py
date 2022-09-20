@@ -31,7 +31,7 @@ def add_to_graph(lines):
 
       for receive in receive_list:
         grafo.adiciona_vertice(receive)
-        grafo.adiciona_aresta(send, receive, 0)
+        grafo.adiciona_aresta(send, receive, 1)
 
       break
 
