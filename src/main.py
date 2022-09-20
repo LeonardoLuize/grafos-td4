@@ -46,3 +46,5 @@ def read_directory(root, directory):
 read_directory(os.path.dirname("./dados"), directory)
 
 grafo.imprime_lista_adjacencias()
+print("\nVértices:", grafo.total_vertices())
+print("Arestas:", grafo.total_arestas())

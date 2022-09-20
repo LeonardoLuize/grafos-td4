@@ -1,3 +1,4 @@
+from functools import total_ordering
 import numpy as np
 from collections import defaultdict
 
@@ -64,6 +65,17 @@ class Grafo:
     else:
       return False
 
+  def total_vertices(self):
+    return self.ordem
+
+  def total_arestas(self):
+    total_edges = 0
+
+    for vertex in self.adjacency_list:
+      for edge in vertex:
+        total_edges += 1
+
+    return total_edges
 
   def peso(self, u, v):
     peso = ""
