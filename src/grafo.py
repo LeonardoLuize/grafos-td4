@@ -91,9 +91,17 @@ class Grafo:
     #print(f"Peso da aresta entre {u} e {v} = {peso[1]}")
     return peso[1]
     
+  def grafo_e_euleriano(self):
+    isEulerian = True
+
+    for vertex in self.adjacency_list:
+      if not self.grau(vertex) % 2:
+        isEulerian = False
+
+    return isEulerian
 
   def grau(self, u):
-    return print("Grau: ", len(self.adjacency_list[u]))
+    return len(self.adjacency_list[u])
     
   
   def imprime_lista_adjacencias(self):
