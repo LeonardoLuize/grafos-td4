@@ -36,10 +36,15 @@ class Grafo:
       elif u == 6:
           return "F"
 
-  def adiciona_aresta(self, u,  v,  peso): 
+  def adiciona_aresta(self, u,  v,  peso):
+    if len(self.adjacency_list) > 0 and len(self.adjacency_list[u]) > 0:
+        for adjacency in self.adjacency_list:
+            if adjacency[0] == v:
+                adjacency[1] += 1
+
     self.adjacency_list[u].append((v, peso)) 
-    return self.adjacency_list
-    
+    return self.adjacency_list    
+
   def tem_aresta(self, u, v):
     if len(self.adjacency_list[u]) == 0:
       return False

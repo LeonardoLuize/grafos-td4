@@ -31,8 +31,7 @@ def add_to_graph(lines):
 
       for receive in receive_list:
         grafo.adiciona_vertice(receive)
-        grafo.adiciona_aresta(send, receive, 5)
-        
+        grafo.adiciona_aresta(send, receive, 0)
 
       break
 
@@ -42,8 +41,6 @@ def read_directory(root, directory):
       if len(new_files) > 0:
         for file in new_files:
           lines = reader.readFilesLines(os.path.join(new_root, file))
-          #adicionar verificação para identificar quem enviou e quem recebeu
-          #depois adicionar ao grafo
           add_to_graph(lines)
 
 read_directory(os.path.dirname("./dados"), directory)
