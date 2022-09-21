@@ -150,7 +150,23 @@ class Grafo:
         i += 1
 
     return adjacencias
-  
+
+  def percorre_em_profundidade(self, u, visited):
+    stack = []
+
+    stack.append(u)
+
+    for neighbour in self.adjacency_list[u]:
+      if neighbour not in visited:
+        visited.append(neighbour)
+        self.percorre_em_profundidade(neighbour, visited)
+
+    if u not in visited:
+        print (u)
+        visited.append(u)
+        for neighbour in self.adjacency_list[u]:
+            self.percorre_em_profundidade(neighbour, visited)
+
   def Dijkstra(self, source_node, target_node):
     visited = []
     cost = [ [np.inf, 0] for i in range(self.ordem) ]
