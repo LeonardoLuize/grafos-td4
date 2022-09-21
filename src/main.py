@@ -56,10 +56,11 @@ grafo.adiciona_aresta("A", "C", 2)
 
 grafo.adiciona_aresta("C", "D", 5)
 grafo.adiciona_aresta("B", "E", 8)
+grafo.adiciona_aresta("B", "D", 2)
 
 grafo.imprime_lista_adjacencias()
 
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
-grafo.percorre_em_profundidade("A", [])
+grafo.percorre_em_profundidade("A", []) #darron.giron@enron.com

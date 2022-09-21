@@ -151,21 +151,29 @@ class Grafo:
 
     return adjacencias
 
-  def percorre_em_profundidade(self, u, visited):
+  def percorre_em_profundidade2(self, u, visited):
     stack = []
 
-    stack.append(u)
-
-    for neighbour in self.adjacency_list[u]:
-      if neighbour not in visited:
-        visited.append(neighbour)
-        self.percorre_em_profundidade(neighbour, visited)
-
     if u not in visited:
-        print (u)
-        visited.append(u)
-        for neighbour in self.adjacency_list[u]:
-            self.percorre_em_profundidade(neighbour, visited)
+      visited.append(u)
+    
+    stack.append(u)
+    print(u)
+    for neighbour in self.adjacency_list[u]:
+      if neighbour[0] not in visited:
+        visited.append(neighbour[0])
+        self.percorre_em_profundidade(neighbour[0], visited)
+
+  def percorre_em_profundidade(self, u, visited, stack):
+    stack.append(u)
+    print(u)
+
+    #if stack[len(stack) - 1]:
+      
+    for neighbour in self.adjacency_list[u]:
+      if neighbour[0] not in visited:
+        visited.append(neighbour[0])
+        self.percorre_em_profundidade(neighbour[0], visited)
 
   def Dijkstra(self, source_node, target_node):
     visited = []
