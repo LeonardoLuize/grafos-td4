@@ -16,14 +16,14 @@ def add_to_graph(lines):
   for line in lines:
     line = line.replace("\n", "")
 
-    if "From: " not in line and re.match(emailRegex, line):
-      splited = line.split(",")
+    if re.match(f"To:.{emailRegex}", line) or re.match(f"{emailRegex}", line.replace(" ", "")):
+      splited = line.replace(" ", "").split(",")
 
       for split in splited:
-        if re.match(emailRegex, split):
+        if re.match(f"To:.{emailRegex}", split) or re.match(emailRegex, split):
           receive_list.append(re.search(emailRegex, split).group())
 
-    if "From: " in line and re.match(emailRegex, line.replace("From: ", "")):
+    if re.match(f"From:.{emailRegex}", line):
       send = re.search(emailRegex, line).group()
 
     if len(receive_list) > 0 and send != "":
@@ -43,8 +43,8 @@ def read_directory(root, directory):
           lines = reader.readFilesLines(os.path.join(new_root, file))
           add_to_graph(lines)
 
-#read_directory(os.path.dirname("./dados"), directory)
-
+read_directory(os.path.dirname("./dados"), directory)
+""" 
 grafo.adiciona_vertice("A")
 grafo.adiciona_vertice("B")
 grafo.adiciona_vertice("C")
@@ -56,11 +56,11 @@ grafo.adiciona_aresta("A", "C", 2)
 
 grafo.adiciona_aresta("C", "D", 5)
 grafo.adiciona_aresta("B", "E", 8)
-grafo.adiciona_aresta("B", "D", 2)
+grafo.adiciona_aresta("B", "D", 2) """
 
-grafo.imprime_lista_adjacencias()
+#grafo.imprime_lista_adjacencias()
 
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
-print(grafo.percorre_em_profundidade("A", [], [])) #darron.giron@enron.com
+print(grafo.percorre_em_profundidade("c..giron@enron.com", [], [])) #darron.giron@enron.com

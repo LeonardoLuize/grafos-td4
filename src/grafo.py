@@ -107,11 +107,11 @@ class Grafo:
   def imprime_lista_adjacencias(self):
  
     for i in self.adjacency_list:
-      print(f"{i}: ")
+      print(f"\n{i}: ")
 
       j = 0
       while j < len(self.adjacency_list[i]):
-        print(f"\b {self.adjacency_list[i][j]} -> \n", end="")
+        print(f"\b | {self.adjacency_list[i][j]} -> \n", end="")
         j += 1
 
   def warshall(self):
@@ -174,10 +174,9 @@ class Grafo:
       if currentVertex not in stack:
         stack.append(currentVertex)
 
-      print(currentVertex)
-
       if len(self.adjacency_list[currentVertex]) == 0:
         stack.pop()
+        if len(stack) == 0: break
         currentVertex = stack[len(stack) - 1]
         continue
 
@@ -185,6 +184,7 @@ class Grafo:
         if neighbour[0] in visited:
           if count == (len(self.adjacency_list[currentVertex]) - 1):
             stack.pop()
+            if len(stack) == 0: break
             currentVertex = stack[len(stack) - 1]
             break
 
