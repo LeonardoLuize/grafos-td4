@@ -43,22 +43,15 @@ def read_directory(root, directory):
           lines = reader.readFilesLines(os.path.join(new_root, file))
           add_to_graph(lines)
 
-##read_directory(os.path.dirname("./dados"), directory)
-grafo.adiciona_vertice("A")
-grafo.adiciona_vertice("B")
-grafo.adiciona_vertice("C")
-grafo.adiciona_vertice("D")
-
-grafo.adiciona_aresta("A", "B", 1)
-grafo.adiciona_aresta("A", "B", 1)
-grafo.adiciona_aresta("A", "C", 1)
-grafo.adiciona_aresta("D", "A", 1)
-grafo.adiciona_aresta("C", "B", 1)
+read_directory(os.path.dirname("./dados"), directory)
 
 grafo.imprime_lista_adjacencias()
 
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
-
+print("\n")
+grafo.get_quantidade_grau_saida()
+print("\n")
+grafo.quantidade_grau_entrada()
 #RUN: python .\src\main.py
