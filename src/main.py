@@ -60,4 +60,10 @@ grafo.imprime_lista_adjacencias()
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
+
+print("\n")
+grafo.get_quantidade_grau_saida()
+print("\n")
+
+grafo.quantidade_grau_entrada()
 grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "shelley.corman@enron.com")
