@@ -63,4 +63,4 @@ grafo.imprime_lista_adjacencias()
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
-grafo.percorre_em_profundidade("A", []) #darron.giron@enron.com
+print(grafo.percorre_em_profundidade("A", [], [])) #darron.giron@enron.com
