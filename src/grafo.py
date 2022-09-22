@@ -151,19 +151,6 @@ class Grafo:
 
     return adjacencias
 
-  def percorre_em_profundidade2(self, u, visited):
-    stack = []
-
-    if u not in visited:
-      visited.append(u)
-    
-    stack.append(u)
-    print(u)
-    for neighbour in self.adjacency_list[u]:
-      if neighbour[0] not in visited:
-        visited.append(neighbour[0])
-        self.percorre_em_profundidade(neighbour[0], visited)
-
   def percorre_em_profundidade(self, u, visited, stack):
     currentVertex = u
     visited.append(u)
@@ -199,13 +186,25 @@ class Grafo:
           currentVertex = neighbour[0]
           break
 
-    position = 1
-    
-    for vertex in visited:
-      print(f"{position} - {vertex}")
-      position += 1
-
     return visited
+
+  def x_alcanca_y_profundidade(self, x, y):
+    visitedList = self.percorre_em_profundidade(x, [], [])
+
+    if y not in visitedList:
+      print(f"{x} não alcança {y} em profundidade")
+      return
+    else:
+      print(f"\n{x} alcança {y} em profundidade")
+      print("Caminho percorrido:")
+
+    position = 1
+
+    for visited in visitedList:
+      print(f"\t|{position}: {visited}")
+      position += 1
+      if visited == y:
+        break
 
   def Dijkstra(self, source_node, target_node):
     visited = []
