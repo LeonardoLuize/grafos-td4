@@ -167,8 +167,9 @@ class Grafo:
   def percorre_em_profundidade(self, u, visited, stack):
     currentVertex = u
     visited.append(u)
+    isFinish = False
 
-    while(len(visited) != self.ordem):
+    while((len(visited) != self.ordem) and isFinish == False):
       count = 0
       
       if currentVertex not in stack:
@@ -184,7 +185,10 @@ class Grafo:
         if neighbour[0] in visited:
           if count == (len(self.adjacency_list[currentVertex]) - 1):
             stack.pop()
-            if len(stack) == 0: break
+            if len(stack) == 0: 
+              isFinish = True
+              break
+
             currentVertex = stack[len(stack) - 1]
             break
 
@@ -194,6 +198,12 @@ class Grafo:
           visited.append(neighbour[0])
           currentVertex = neighbour[0]
           break
+
+    position = 1
+    
+    for vertex in visited:
+      print(f"{position} - {vertex}")
+      position += 1
 
     return visited
 

@@ -63,4 +63,4 @@ grafo.adiciona_aresta("B", "D", 2) """
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
-print(grafo.percorre_em_profundidade("c..giron@enron.com", [], [])) #darron.giron@enron.com
+grafo.percorre_em_profundidade("c..giron@enron.com", [], []) #darron.giron@enron.com
