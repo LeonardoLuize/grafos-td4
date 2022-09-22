@@ -1,6 +1,7 @@
 from functools import total_ordering
 import numpy as np
 from collections import defaultdict
+import time
 
 class Grafo:
   def __init__(self):
@@ -150,7 +151,32 @@ class Grafo:
         i += 1
 
     return adjacencias
-  
+
+  def percorre_largura(self, initialNode, nodeOfInterest):
+    start_time = time.time()
+    visited = []
+    queue = []     
+    visited.append(initialNode)
+    queue.append(initialNode)
+
+    while len(queue) != 0:
+      currentNode = queue.pop(0)
+
+      if len(self.adjacency_list[initialNode]) == 0:
+        print(f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}")
+
+      for neighbour in self.adjacency_list[currentNode]:
+        if neighbour[0] == nodeOfInterest:
+          finish_time = time.time()
+          period = (finish_time - start_time)
+          print(f"Tempo de execução: {round(period, 4)}s")
+          print(f"Vértices visitados entre {initialNode} e {nodeOfInterest}: ")
+          return visited
+        else:
+          if neighbour not in visited:
+            visited.append(neighbour[0])
+            queue.append(neighbour[0])
+        
   def Dijkstra(self, source_node, target_node):
     visited = []
     cost = [ [np.inf, 0] for i in range(self.ordem) ]
