@@ -107,11 +107,11 @@ class Grafo:
   def imprime_lista_adjacencias(self):
  
     for i in self.adjacency_list:
-      print(f"{i}: ")
+      print(f"\n{i}: ")
 
       j = 0
       while j < len(self.adjacency_list[i]):
-        print(f"\b {self.adjacency_list[i][j]} -> \n", end="")
+        print(f"\b | {self.adjacency_list[i][j]} -> \n", end="")
         j += 1
 
   def warshall(self):
@@ -150,7 +150,62 @@ class Grafo:
         i += 1
 
     return adjacencias
-  
+
+  def percorre_em_profundidade(self, u, visited, stack):
+    currentVertex = u
+    visited.append(u)
+    isFinish = False
+
+    while((len(visited) != self.ordem) and isFinish == False):
+      count = 0
+      
+      if currentVertex not in stack:
+        stack.append(currentVertex)
+
+      if len(self.adjacency_list[currentVertex]) == 0:
+        stack.pop()
+        if len(stack) == 0: break
+        currentVertex = stack[len(stack) - 1]
+        continue
+
+      for neighbour in self.adjacency_list[currentVertex]:
+        if neighbour[0] in visited:
+          if count == (len(self.adjacency_list[currentVertex]) - 1):
+            stack.pop()
+            if len(stack) == 0: 
+              isFinish = True
+              break
+
+            currentVertex = stack[len(stack) - 1]
+            break
+
+        count += 1
+
+        if neighbour[0] not in visited:
+          visited.append(neighbour[0])
+          currentVertex = neighbour[0]
+          break
+
+    return visited
+
+  def x_alcanca_y_profundidade(self, x, y):
+    visitedList = self.percorre_em_profundidade(x, [], [])
+
+    if y not in visitedList:
+      print(f"{x} não alcança {y} em profundidade")
+      return
+    else:
+      print(f"\n{x} alcança {y} em profundidade")
+      print("Caminho percorrido:")
+
+    position = 1
+
+    for visited in visitedList:
+      print(f"\t|{position}: {visited}")
+      position += 1
+      if visited == y:
+        break
+
   def Dijkstra(self, source_node, target_node):
     visited = []
     cost = [ [np.inf, 0] for i in range(self.ordem) ]
