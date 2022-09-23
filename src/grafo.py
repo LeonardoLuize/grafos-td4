@@ -24,20 +24,6 @@ class Grafo:
     self.adjacency_list[rotulo]
     return self.adjacency_list
 
-  def get_vertice(self, u):
-      if u == 1:
-        return "A"
-      elif u == 2:
-          return "B"
-      elif u == 3:
-          return "C"
-      elif u == 4:
-          return "D"
-      elif u == 5:
-          return "E"
-      elif u == 6:
-          return "F"
-
   def adiciona_aresta(self, u,  v,  peso):
     isDuplicated = False
 
@@ -281,33 +267,50 @@ class Grafo:
       if visited == y:
         break
 
+  def maior_caminho_minimo(self):
+    maiorCaminhoMinimo = []
+    for vertex in self.adjacency_list:
+      for second_vertex in self.adjacency_list:
+        menor_caminho_vertex = self.Dijkstra(vertex, second_vertex)
+
+        if len(menor_caminho_vertex) > len(maiorCaminhoMinimo):
+          maiorCaminhoMinimo = menor_caminho_vertex
+       
+    return maiorCaminhoMinimo
+
   def Dijkstra(self, source_node, target_node):
     visited = []
-    cost = [ [np.inf, 0] for i in range(self.ordem) ]
+
+    vertex_value = ["", 100000000]
+
     caminho = []
-    #cost[source_node][0] = 0
     current_node = source_node
 
-    caminho.append(self.get_vertice(current_node))
+    caminho.append(source_node)
+    visited.append(source_node)
     
     while len(visited) < self.ordem:
-      adjacent_nodes = self.get_adjacent(current_node)
-      for node in adjacent_nodes:
+      adjacent_nodes = current_node
+
+      if len(self.adjacency_list[adjacent_nodes]) == 0:
+        break
+      
+      for node in self.adjacency_list[adjacent_nodes]:
         if node in visited:
           continue
           
-        peso = Grafo.peso(self, current_node, node)
+        peso = Grafo.peso(self, current_node, node[0])
 
-        if peso < cost[current_node][0]:
-          cost[current_node][0] = peso
-          cost[current_node][1] = node
+        if peso < vertex_value[1]:
+          vertex_value[1] = peso
+          vertex_value[0] = node[0]
 
-      caminho.append([self.get_vertice(cost[current_node][1]), cost[current_node][0]])
+      caminho.append(vertex_value)
       
-      if cost[current_node][1] == target_node:
+      if vertex_value[0] == target_node:
         break
 
       visited.append(current_node)
-      current_node = cost[current_node][1]
+      current_node = vertex_value[0]
           
     return caminho

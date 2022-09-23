@@ -60,3 +60,4 @@ grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "tstreicher@servicepro.
 
 grafo.vertices_a_x_arestas(5, "darron.giron@enron.com")
 
+print(grafo.maior_caminho_minimo())
