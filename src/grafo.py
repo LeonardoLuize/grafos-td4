@@ -134,7 +134,7 @@ class Grafo:
       print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
 
 
-  def possuiCaminho (self, u, v):
+  def possuiCaminho(self, u, v):
     matrizAlcancabilidade = self.warshall()
     if matrizAlcancabilidade[u][v]:
       return True
@@ -162,9 +162,6 @@ class Grafo:
     while len(queue) != 0:
       currentNode = queue.pop(0)
 
-      if len(self.adjacency_list[initialNode]) == 0:
-        print(f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}")
-
       for neighbour in self.adjacency_list[currentNode]:
         if neighbour[0] == nodeOfInterest:
           finish_time = time.time()
@@ -176,6 +173,9 @@ class Grafo:
           if neighbour not in visited:
             visited.append(neighbour[0])
             queue.append(neighbour[0])
+    
+    if len(self.adjacency_list[initialNode]) == 0 or nodeOfInterest not in visited:
+      return f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}"
         
   def Dijkstra(self, source_node, target_node):
     visited = []
