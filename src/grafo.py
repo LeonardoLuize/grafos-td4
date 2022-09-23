@@ -1,6 +1,7 @@
 from functools import total_ordering
 import numpy as np
 from collections import defaultdict
+import time
 
 class Grafo:
   def __init__(self):
@@ -165,7 +166,7 @@ class Grafo:
       print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
 
 
-  def possuiCaminho (self, u, v):
+  def possuiCaminho(self, u, v):
     matrizAlcancabilidade = self.warshall()
     if matrizAlcancabilidade[u][v]:
       return True
@@ -183,6 +184,32 @@ class Grafo:
 
     return adjacencias
 
+
+  def percorre_largura(self, initialNode, nodeOfInterest):
+    start_time = time.time()
+    visited = []
+    queue = []     
+    visited.append(initialNode)
+    queue.append(initialNode)
+
+    while len(queue) != 0:
+      currentNode = queue.pop(0)
+
+      for neighbour in self.adjacency_list[currentNode]:
+        if neighbour[0] == nodeOfInterest:
+          finish_time = time.time()
+          period = (finish_time - start_time)
+          print(f"Tempo de execução: {round(period, 4)}s")
+          print(f"Vértices visitados entre {initialNode} e {nodeOfInterest}: ")
+          return visited
+        else:
+          if neighbour not in visited:
+            visited.append(neighbour[0])
+            queue.append(neighbour[0])
+    
+    if len(self.adjacency_list[initialNode]) == 0 or nodeOfInterest not in visited:
+      return f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}"
+        
   def vertices_a_x_arestas(self, x, u):
     vertexList = self.adjacency_list[u]
     vertexList = vertexList[:x]
@@ -194,6 +221,7 @@ class Grafo:
       position += 1
 
     return vertexList
+
 
   def percorre_em_profundidade(self, u, visited, stack):
     currentVertex = u
