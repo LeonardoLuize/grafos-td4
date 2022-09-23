@@ -1,6 +1,7 @@
 from functools import total_ordering
 import numpy as np
 from collections import defaultdict
+import time
 
 class Grafo:
   def __init__(self):
@@ -102,8 +103,40 @@ class Grafo:
 
   def grau(self, u):
     return len(self.adjacency_list[u])
+
+
+  def grau_entrada(self, vertice):
+    lista = []
+    for vertex in self.adjacency_list:
+      for adj in self.adjacency_list[vertex]:
+        if adj[0] == vertice:
+          lista.append(vertex)
+
+    return len(lista)
+
+  def quantidade_grau_entrada(self):
+    lista = []
+    for vertex in self.adjacency_list:
+      quant_vertice = self.grau_entrada(vertex)
+      lista.append([quant_vertice, vertex])
+
+    lista.sort(reverse=True)
+    return print("20 maiores grau de entrada", lista[:20])
+
+
+  def grau_saida(self, u):
+    return len(self.adjacency_list[u])
     
-  
+  def get_quantidade_grau_saida(self):
+    lista = []
+    for vertex in self.adjacency_list:
+      quant_vertice = self.grau_saida(vertex)
+      lista.append([quant_vertice, vertex])
+
+    lista.sort(reverse=True)
+    return print("20 maiores grau de saida", lista[:20])
+
+
   def imprime_lista_adjacencias(self):
  
     for i in self.adjacency_list:
@@ -133,7 +166,7 @@ class Grafo:
       print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
 
 
-  def possuiCaminho (self, u, v):
+  def possuiCaminho(self, u, v):
     matrizAlcancabilidade = self.warshall()
     if matrizAlcancabilidade[u][v]:
       return True
@@ -150,6 +183,45 @@ class Grafo:
         i += 1
 
     return adjacencias
+
+
+  def percorre_largura(self, initialNode, nodeOfInterest):
+    start_time = time.time()
+    visited = []
+    queue = []     
+    visited.append(initialNode)
+    queue.append(initialNode)
+
+    while len(queue) != 0:
+      currentNode = queue.pop(0)
+
+      for neighbour in self.adjacency_list[currentNode]:
+        if neighbour[0] == nodeOfInterest:
+          finish_time = time.time()
+          period = (finish_time - start_time)
+          print(f"Tempo de execução: {round(period, 4)}s")
+          print(f"Vértices visitados entre {initialNode} e {nodeOfInterest}: ")
+          return visited
+        else:
+          if neighbour not in visited:
+            visited.append(neighbour[0])
+            queue.append(neighbour[0])
+    
+    if len(self.adjacency_list[initialNode]) == 0 or nodeOfInterest not in visited:
+      return f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}"
+        
+  def vertices_a_x_arestas(self, x, u):
+    vertexList = self.adjacency_list[u]
+    vertexList = vertexList[:x]
+    position = 1
+
+    print(f"\nVértices a uma distância de {x} arestas de {u}: ")
+    for vertex in vertexList:
+      print(f"\t{position}. {vertex}")
+      position += 1
+
+    return vertexList
+
 
   def percorre_em_profundidade(self, u, visited, stack):
     currentVertex = u
@@ -189,13 +261,16 @@ class Grafo:
     return visited
 
   def x_alcanca_y_profundidade(self, x, y):
+    start_time = time.time()
     visitedList = self.percorre_em_profundidade(x, [], [])
+    finish_time = time.time()
+    period = (finish_time - start_time)
 
     if y not in visitedList:
-      print(f"{x} não alcança {y} em profundidade")
+      print(f"\n{x} não alcança {y} em profundidade")
       return
     else:
-      print(f"\n{x} alcança {y} em profundidade")
+      print(f"\n{x} alcança {y} em profundidade em {period}s")
       print("Caminho percorrido:")
 
     position = 1
