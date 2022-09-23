@@ -29,8 +29,9 @@ def add_to_graph(lines):
       grafo.adiciona_vertice(send)
 
       for receive in receive_list:
-        grafo.adiciona_vertice(receive)
-        grafo.adiciona_aresta(send, receive, 1)
+        if receive != send:
+          grafo.adiciona_vertice(receive)
+          grafo.adiciona_aresta(send, receive, 1)
 
       break    
 

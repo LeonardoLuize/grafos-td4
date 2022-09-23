@@ -13,7 +13,7 @@ class Grafo:
     isValid = True
     
     for adjacency in self.adjacency_list:
-      if rotulo == adjacency:
+      if rotulo.replace(" ", "") == adjacency:
         isValid = False
         break
 
@@ -21,7 +21,7 @@ class Grafo:
       return
       
     self.ordem += 1
-    self.adjacency_list[rotulo]
+    self.adjacency_list[rotulo.replace(" ", "")]
     return self.adjacency_list
 
   def adiciona_aresta(self, u,  v,  peso):
@@ -293,7 +293,7 @@ class Grafo:
     caminho_minimo = self.maior_caminho_minimo()
     position = 1
 
-    print("\nMaior caminho minimo:")
+    print(f"\nMaior caminho minimo possui tamanho {len(caminho_minimo)}:")
 
     for vertex in caminho_minimo:
       print(f"\t| {position}. {vertex}")
