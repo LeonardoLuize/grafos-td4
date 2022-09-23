@@ -24,20 +24,6 @@ class Grafo:
     self.adjacency_list[rotulo]
     return self.adjacency_list
 
-  def get_vertice(self, u):
-      if u == 1:
-        return "A"
-      elif u == 2:
-          return "B"
-      elif u == 3:
-          return "C"
-      elif u == 4:
-          return "D"
-      elif u == 5:
-          return "E"
-      elif u == 6:
-          return "F"
-
   def adiciona_aresta(self, u,  v,  peso):
     isDuplicated = False
 
@@ -281,33 +267,66 @@ class Grafo:
       if visited == y:
         break
 
+  def imprime_maior_caminho_minimo(self):
+    caminho_minimo = self.maior_caminho_minimo()
+    position = 1
+
+    print("\nMaior caminho minimo:")
+
+    for vertex in caminho_minimo:
+      print(f"\t| {position}. {vertex}")
+      position += 1
+
+  def maior_caminho_minimo(self):
+    maiorCaminhoMinimo = []
+    for vertex in self.adjacency_list:
+      for second_vertex in self.adjacency_list:
+        menor_caminho_vertex = self.Dijkstra(vertex, second_vertex)
+
+        if len(menor_caminho_vertex) > len(maiorCaminhoMinimo):
+          maiorCaminhoMinimo = menor_caminho_vertex
+       
+    return maiorCaminhoMinimo
+
   def Dijkstra(self, source_node, target_node):
     visited = []
-    cost = [ [np.inf, 0] for i in range(self.ordem) ]
     caminho = []
-    #cost[source_node][0] = 0
     current_node = source_node
 
-    caminho.append(self.get_vertice(current_node))
-    
     while len(visited) < self.ordem:
-      adjacent_nodes = self.get_adjacent(current_node)
-      for node in adjacent_nodes:
-        if node in visited:
-          continue
-          
-        peso = Grafo.peso(self, current_node, node)
+      adjacent_node = current_node
+      current_visited = []
+      peso = ""
 
-        if peso < cost[current_node][0]:
-          cost[current_node][0] = peso
-          cost[current_node][1] = node
-
-      caminho.append([self.get_vertice(cost[current_node][1]), cost[current_node][0]])
-      
-      if cost[current_node][1] == target_node:
+      #caso o nó não tenha nós adjacentes para o laço
+      if len(self.adjacency_list[adjacent_node]) == 0:
         break
 
+      for node in self.adjacency_list[adjacent_node]:
+        node_weight = node[1]
+        node_name = node[0]
+
+        #verifica se o nó foi visitado, se foi, adiciona o nó em um array
+        #para verificar posteriormente se todos os seus nós adjacentes foram 
+        #visitados, para não causar um loop infinito
+        if node_name in visited:
+          current_visited.append(node)
+          continue
+
+        #pega o menor peso entre os nós adjacentes
+        if peso == "" or node_weight < peso:
+          peso = node_weight
+          current_node = node_name
+
+      #Se todos os nós adjacentes foram visitados, para o while
+      if len(current_visited) == len(self.adjacency_list[adjacent_node]):
+        break
+
+      caminho.append(current_node)
       visited.append(current_node)
-      current_node = cost[current_node][1]
-          
+      
+      #se for o nó alvo para a execução e retorna o caminho
+      if current_node == target_node:
+        break
+
     return caminho
