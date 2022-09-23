@@ -15,16 +15,15 @@ def add_to_graph(lines):
 
   for line in lines:
     line = line.replace("\n", "")
+    blank = re.findall("\t", line)
+    values = re.findall(emailRegex, line)
 
-    if "From: " not in line and re.match(emailRegex, line):
-      splited = line.split(",")
-
-      for split in splited:
-        if re.match(emailRegex, split):
-          receive_list.append(re.search(emailRegex, split).group())
-
-    if "From: " in line and re.match(emailRegex, line.replace("From: ", "")):
-      send = re.search(emailRegex, line).group()
+    if len(values) > 0:
+      if re.match(f"From:.{emailRegex}", line):
+        send = values[0]
+      elif len(blank) > 0 or re.match(f"To:.{emailRegex}", line):
+        for value in values:
+            receive_list.append(value)  
 
     if len(receive_list) > 0 and send != "":
       grafo.adiciona_vertice(send)
@@ -33,8 +32,7 @@ def add_to_graph(lines):
         grafo.adiciona_vertice(receive)
         grafo.adiciona_aresta(send, receive, 1)
 
-      break
-
+      break    
 
 def read_directory(root, directory):
   for new_root, new_dirs, new_files in os.walk(os.path.join(root, directory)):
@@ -43,33 +41,17 @@ def read_directory(root, directory):
           lines = reader.readFilesLines(os.path.join(new_root, file))
           add_to_graph(lines)
 
-#read_directory(os.path.dirname("./dados"), directory)
+read_directory(os.path.dirname("./dados"), directory)
 
-grafo.adiciona_vertice("A")
-grafo.adiciona_vertice("B")
-grafo.adiciona_vertice("C")
-grafo.adiciona_vertice("D")
-grafo.adiciona_vertice("E")
-grafo.adiciona_vertice("F")
-grafo.adiciona_vertice("G")
-grafo.adiciona_vertice("H")
-grafo.adiciona_vertice("I")
-grafo.adiciona_vertice("S")
-grafo.adiciona_vertice("K")
-grafo.adiciona_aresta("S", "A", 1)
-grafo.adiciona_aresta("S", "B", 1)
-grafo.adiciona_aresta("A", "C", 1)
-grafo.adiciona_aresta("A", "D", 1)
-grafo.adiciona_aresta("B", "G", 1)
-grafo.adiciona_aresta("B", "H", 1)
-grafo.adiciona_aresta("C", "E", 1)
-grafo.adiciona_aresta("C", "F", 1)
-grafo.adiciona_aresta("E", "K", 1)
-grafo.adiciona_aresta("G", "I", 1)
-
-#grafo.imprime_lista_adjacencias()
-
+grafo.imprime_lista_adjacencias()
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não" )
 print(grafo.percorre_largura("S", "K"))
+
+print("\n")
+grafo.get_quantidade_grau_saida()
+print("\n")
+
+grafo.quantidade_grau_entrada()
+grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "shelley.corman@enron.com")

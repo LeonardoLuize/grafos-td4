@@ -103,16 +103,48 @@ class Grafo:
 
   def grau(self, u):
     return len(self.adjacency_list[u])
+
+
+  def grau_entrada(self, vertice):
+    lista = []
+    for vertex in self.adjacency_list:
+      for adj in self.adjacency_list[vertex]:
+        if adj[0] == vertice:
+          lista.append(vertex)
+
+    return len(lista)
+
+  def quantidade_grau_entrada(self):
+    lista = []
+    for vertex in self.adjacency_list:
+      quant_vertice = self.grau_entrada(vertex)
+      lista.append([quant_vertice, vertex])
+
+    lista.sort(reverse=True)
+    return print("20 maiores grau de entrada", lista[:20])
+
+
+  def grau_saida(self, u):
+    return len(self.adjacency_list[u])
     
-  
+  def get_quantidade_grau_saida(self):
+    lista = []
+    for vertex in self.adjacency_list:
+      quant_vertice = self.grau_saida(vertex)
+      lista.append([quant_vertice, vertex])
+
+    lista.sort(reverse=True)
+    return print("20 maiores grau de saida", lista[:20])
+
+
   def imprime_lista_adjacencias(self):
  
     for i in self.adjacency_list:
-      print(f"{i}: ")
+      print(f"\n{i}: ")
 
       j = 0
       while j < len(self.adjacency_list[i]):
-        print(f"\b {self.adjacency_list[i][j]} -> \n", end="")
+        print(f"\b | {self.adjacency_list[i][j]} -> \n", end="")
         j += 1
 
   def warshall(self):
@@ -177,6 +209,61 @@ class Grafo:
     if len(self.adjacency_list[initialNode]) == 0 or nodeOfInterest not in visited:
       return f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}"
         
+  def percorre_em_profundidade(self, u, visited, stack):
+    currentVertex = u
+    visited.append(u)
+    isFinish = False
+
+    while((len(visited) != self.ordem) and isFinish == False):
+      count = 0
+      
+      if currentVertex not in stack:
+        stack.append(currentVertex)
+
+      if len(self.adjacency_list[currentVertex]) == 0:
+        stack.pop()
+        if len(stack) == 0: break
+        currentVertex = stack[len(stack) - 1]
+        continue
+
+      for neighbour in self.adjacency_list[currentVertex]:
+        if neighbour[0] in visited:
+          if count == (len(self.adjacency_list[currentVertex]) - 1):
+            stack.pop()
+            if len(stack) == 0: 
+              isFinish = True
+              break
+
+            currentVertex = stack[len(stack) - 1]
+            break
+
+        count += 1
+
+        if neighbour[0] not in visited:
+          visited.append(neighbour[0])
+          currentVertex = neighbour[0]
+          break
+
+    return visited
+
+  def x_alcanca_y_profundidade(self, x, y):
+    visitedList = self.percorre_em_profundidade(x, [], [])
+
+    if y not in visitedList:
+      print(f"{x} não alcança {y} em profundidade")
+      return
+    else:
+      print(f"\n{x} alcança {y} em profundidade")
+      print("Caminho percorrido:")
+
+    position = 1
+
+    for visited in visitedList:
+      print(f"\t|{position}: {visited}")
+      position += 1
+      if visited == y:
+        break
+
   def Dijkstra(self, source_node, target_node):
     visited = []
     cost = [ [np.inf, 0] for i in range(self.ordem) ]
