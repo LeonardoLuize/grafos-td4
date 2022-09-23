@@ -48,7 +48,7 @@ grafo.imprime_lista_adjacencias()
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
 print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não", "\n" )
-"""
+
 print(grafo.percorre_largura("darron.giron@enron.com", "tstreicher@servicepro.net"))
 
 print("\n")
@@ -62,4 +62,4 @@ grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "tstreicher@servicepro.
 
 grafo.vertices_a_x_arestas(5, "darron.giron@enron.com")
 
-grafo.imprime_maior_caminho_minimo() """
+grafo.imprime_maior_caminho_minimo()
