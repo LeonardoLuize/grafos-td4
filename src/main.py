@@ -47,15 +47,11 @@ grafo.imprime_lista_adjacencias()
 
 print("\nVértices:", grafo.total_vertices())
 print("Arestas:", grafo.total_arestas())
-print("É euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não", "\n" )
+grafo.quantidade_grau_saida()
+grafo.quantidade_grau_entrada()
+print("\nÉ euleriano?", "Sim" if grafo.grafo_e_euleriano() else "Não", "\n" )
 
 print(grafo.percorre_largura("darron.giron@enron.com", "tstreicher@servicepro.net"))
-
-print("\n")
-grafo.get_quantidade_grau_saida()
-
-print("\n")
-grafo.quantidade_grau_entrada()
 
 grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "teste@orkut.com")
 grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "tstreicher@servicepro.net")

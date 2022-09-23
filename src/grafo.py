@@ -101,13 +101,35 @@ class Grafo:
     return len(lista)
 
   def quantidade_grau_entrada(self):
+    print("\n")
     lista = []
     for vertex in self.adjacency_list:
       quant_vertice = self.grau_entrada(vertex)
       lista.append([quant_vertice, vertex])
 
     lista.sort(reverse=True)
-    return print("20 maiores grau de entrada", lista[:20])
+    novaLista = []
+    for item in lista:
+      novaLista.append([item[1], item[0]])
+
+    return print("20 indivíduos com maior grau de entrada", novaLista[:20])
+
+
+  def grau_saida(self, u):
+    return len(self.adjacency_list[u])
+    
+  def quantidade_grau_saida(self):
+    lista = []
+    for vertex in self.adjacency_list:
+      quant_vertice = self.grau_saida(vertex)
+      lista.append([quant_vertice, vertex])
+
+    lista.sort(reverse=True)
+    novaLista = []
+    for item in lista:
+      novaLista.append([item[1], item[0]])
+
+    return print("20 indivíduos com maior grau de saida", novaLista[:20])
 
 
   def grau_saida(self, u):
