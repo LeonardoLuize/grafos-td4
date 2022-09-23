@@ -267,6 +267,16 @@ class Grafo:
       if visited == y:
         break
 
+  def imprime_maior_caminho_minimo(self):
+    caminho_minimo = self.maior_caminho_minimo()
+    position = 1
+
+    print("\nMaior caminho minimo:")
+
+    for vertex in caminho_minimo:
+      print(f"\t| {position}. {vertex}")
+      position += 1
+
   def maior_caminho_minimo(self):
     maiorCaminhoMinimo = []
     for vertex in self.adjacency_list:
@@ -280,37 +290,43 @@ class Grafo:
 
   def Dijkstra(self, source_node, target_node):
     visited = []
-
-    vertex_value = ["", 100000000]
-
     caminho = []
     current_node = source_node
 
-    caminho.append(source_node)
-    visited.append(source_node)
-    
     while len(visited) < self.ordem:
-      adjacent_nodes = current_node
+      adjacent_node = current_node
+      current_visited = []
+      peso = ""
 
-      if len(self.adjacency_list[adjacent_nodes]) == 0:
+      #caso o nó não tenha nós adjacentes para o laço
+      if len(self.adjacency_list[adjacent_node]) == 0:
         break
-      
-      for node in self.adjacency_list[adjacent_nodes]:
-        if node in visited:
+
+      for node in self.adjacency_list[adjacent_node]:
+        node_weight = node[1]
+        node_name = node[0]
+
+        #verifica se o nó foi visitado, se foi, adiciona o nó em um array
+        #para verificar posteriormente se todos os seus nós adjacentes foram 
+        #visitados, para não causar um loop infinito
+        if node_name in visited:
+          current_visited.append(node)
           continue
-          
-        peso = Grafo.peso(self, current_node, node[0])
 
-        if peso < vertex_value[1]:
-          vertex_value[1] = peso
-          vertex_value[0] = node[0]
+        #pega o menor peso entre os nós adjacentes
+        if peso == "" or node_weight < peso:
+          peso = node_weight
+          current_node = node_name
 
-      caminho.append(vertex_value)
-      
-      if vertex_value[0] == target_node:
+      #Se todos os nós adjacentes foram visitados, para o while
+      if len(current_visited) == len(self.adjacency_list[adjacent_node]):
         break
 
+      caminho.append(current_node)
       visited.append(current_node)
-      current_node = vertex_value[0]
-          
+      
+      #se for o nó alvo para a execução e retorna o caminho
+      if current_node == target_node:
+        break
+
     return caminho
