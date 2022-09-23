@@ -261,13 +261,16 @@ class Grafo:
     return visited
 
   def x_alcanca_y_profundidade(self, x, y):
+    start_time = time.time()
     visitedList = self.percorre_em_profundidade(x, [], [])
+    finish_time = time.time()
+    period = (finish_time - start_time)
 
     if y not in visitedList:
       print(f"\n{x} não alcança {y} em profundidade")
       return
     else:
-      print(f"\n{x} alcança {y} em profundidade")
+      print(f"\n{x} alcança {y} em profundidade em {period}s")
       print("Caminho percorrido:")
 
     position = 1
