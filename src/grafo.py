@@ -184,6 +184,7 @@ class Grafo:
 
     return adjacencias
 
+
   def percorre_largura(self, initialNode, nodeOfInterest):
     start_time = time.time()
     visited = []
@@ -209,6 +210,19 @@ class Grafo:
     if len(self.adjacency_list[initialNode]) == 0 or nodeOfInterest not in visited:
       return f"O vértice {nodeOfInterest} não pode ser alcançado a partir de {initialNode}"
         
+  def vertices_a_x_arestas(self, x, u):
+    vertexList = self.adjacency_list[u]
+    vertexList = vertexList[:x]
+    position = 1
+
+    print(f"\nVértices a uma distância de {x} arestas de {u}: ")
+    for vertex in vertexList:
+      print(f"\t{position}. {vertex}")
+      position += 1
+
+    return vertexList
+
+
   def percorre_em_profundidade(self, u, visited, stack):
     currentVertex = u
     visited.append(u)
@@ -250,7 +264,7 @@ class Grafo:
     visitedList = self.percorre_em_profundidade(x, [], [])
 
     if y not in visitedList:
-      print(f"{x} não alcança {y} em profundidade")
+      print(f"\n{x} não alcança {y} em profundidade")
       return
     else:
       print(f"\n{x} alcança {y} em profundidade")

@@ -51,7 +51,12 @@ print(grafo.percorre_largura("S", "K"))
 
 print("\n")
 grafo.get_quantidade_grau_saida()
-print("\n")
 
+print("\n")
 grafo.quantidade_grau_entrada()
-grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "shelley.corman@enron.com")
+
+grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "teste@orkut.com")
+grafo.x_alcanca_y_profundidade("darron.giron@enron.com", "tstreicher@servicepro.net")
+
+grafo.vertices_a_x_arestas(5, "darron.giron@enron.com")
+
