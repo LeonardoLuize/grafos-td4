@@ -1,6 +1,6 @@
 from grafo import Grafo
 
-class ScaleFreeGraph:
+class Network:
 
     graph: Grafo
     length: int
