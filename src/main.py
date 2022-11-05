@@ -1,11 +1,12 @@
 from readFile import ReadFile
-from grafo import Grafo
+from Network import Network
 import re
 import os
  
 directory = './dados'
 #reader = ReadFile()
-grafo = Grafo()
+nw = Network()
+graph = nw.generate_scale_graph(150)
 
 """ def read_directory(root, directory):
   for new_root, new_dirs, new_files in os.walk(os.path.join(root, directory)):
