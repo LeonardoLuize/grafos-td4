@@ -134,6 +134,9 @@ class Grafo:
 
   def grau_saida(self, u):
     return len(self.adjacency_list[u])
+
+  def get_adjacency_list(self):
+    return self.adjacency_list
     
   def get_quantidade_grau_saida(self):
     lista = []
