@@ -43,6 +43,26 @@ class Grafo:
 
     return self.adjacency_list    
 
+
+  def adiciona_aresta_nao_direcionada(self, u,  v,  peso):
+    isDuplicated = False
+
+    if len(self.adjacency_list) > 0 and len(self.adjacency_list[u]) > 0:
+      index = 0
+      for adjacency in self.adjacency_list[u]:
+        if adjacency[0] == v:
+            list_adjacency = list(self.adjacency_list[u][index])
+            list_adjacency[1] += 1
+            self.adjacency_list[u][index] = tuple(list_adjacency)
+            isDuplicated = True
+
+        index += 1
+
+    if not isDuplicated:
+      self.adjacency_list[u].append((v, peso)) 
+
+    return self.adjacency_list    
+
   def tem_aresta(self, u, v):
     if len(self.adjacency_list[u]) == 0:
       return False
@@ -244,17 +264,21 @@ class Grafo:
       
       if currentVertex not in stack:
         stack.append(currentVertex)
+        #print('stack1', stack)
 
       if len(self.adjacency_list[currentVertex]) == 0:
         stack.pop()
         if len(stack) == 0: break
+        #print("currentVertex ", currentVertex)
         currentVertex = stack[len(stack) - 1]
         continue
 
       for neighbour in self.adjacency_list[currentVertex]:
+        #print("neighbour", neighbour)
         if neighbour[0] in visited:
           if count == (len(self.adjacency_list[currentVertex]) - 1):
             stack.pop()
+            #print('stack2 ', stack)
             if len(stack) == 0: 
               isFinish = True
               break
@@ -268,8 +292,45 @@ class Grafo:
           visited.append(neighbour[0])
           currentVertex = neighbour[0]
           break
-
+    #print("VISITED ", visited)
     return visited
+
+  def numberComponents(self):
+    #rodar dfs e se não for conectado a nenhum, adicionar 1 ao contador
+    count = 0
+    visitedList = []
+
+    for vertice in self.adjacency_list:
+      lstCurrentVertex = self.percorre_em_profundidade(vertice , [], [])
+      visitedList.append(lstCurrentVertex)
+      #comparação
+      """ for itemList in visitedList:
+        intersection = list(set(lstCurrentVertex).intersection(set(itemList)))
+        print("\nintersection: " + str(intersection))
+        print("itemList: " + str(itemList))
+       
+        if len(intersection) != len(itemList):
+          print("\n", itemList)
+          count += 1 
+          break  """
+
+    components = []
+    for item in visitedList:
+      for second_item in visitedList:
+        if not np.array_equal(item, second_item):
+          components.append(second_item)
+          
+    print(components)
+        
+      
+    return count
+    
+
+  def numberSCCs():
+
+
+    return 0
+  
 
   def x_alcanca_y_profundidade(self, x, y):
     start_time = time.time()
@@ -311,7 +372,7 @@ class Grafo:
         if len(menor_caminho_vertex) > len(maiorCaminhoMinimo):
           maiorCaminhoMinimo = menor_caminho_vertex
        
-    return maiorCaminhoMinimo
+    return maiorCaminhoMinimo    
 
   def Dijkstra(self, source_node, target_node):
     visited = []
