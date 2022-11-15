@@ -19,5 +19,5 @@ git commit -m"<sua_mensagem>"
 git push
 ```
 
-> **Warning**
+> **Warning**</br>
 > Pode ser que tenha conflitos, nesse caso é importante tomar cuidado para não sobrescrever dados importantes
