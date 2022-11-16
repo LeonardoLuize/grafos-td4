@@ -371,13 +371,19 @@ class Grafo:
         tupla = (n, vertice)
         adjacency_list.write('"' + str(n) + " " + vertice + '"' + "\n")
         vertex_list = self.percorre_em_profundidade(vertice, [], [])
-        origem = vertice
-        destino = vertex_list[len(vertex_list) - 1]
         n += 1
 
       if self.is_directed:
           adjacency_list.write("edges")
       else:
           adjacency_list.write("arcs")
+
+      for vertice in self.adjacency_list:
+        tupla = (n, vertice)
+        vertex_list = self.percorre_em_profundidade(vertice, [], [])
+        origem = vertice
+        destino = vertex_list[len(vertex_list) - 1]  
+        n += 1
+        adjacency_list.write(origem + " " + destino + "\n") 
 
       
