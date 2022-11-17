@@ -2,6 +2,7 @@ from functools import total_ordering
 import numpy as np
 from collections import defaultdict
 import time
+import matplotlib.pyplot as plt
 
 class Grafo:
   def __init__(self):
@@ -436,5 +437,32 @@ class Grafo:
 
     dag = {"dag": visited, "remove": removed_vertex}
     return dag
+  
+  def histogramaGraus(self):
+    listaGraus = []
+
+    for cada in self.adjacency_list:
+      listaGraus.append(self.grau(cada))
+
+    plt.title('Histograma com a distribuição de graus do grafo')
+    plt.xlabel('Graus')
+    plt.ylabel('Vértices')
+    plt.hist(listaGraus)
+    plt.show()
+
+  def histogramaCaminhos(self):
+    matrizCaminhos = self.warshall()
+    qntCaminhos = []
+
+    index = 0
+    while index < len(matrizCaminhos):
+      qntCaminhos.append(sum(matrizCaminhos[index]))
+      index += 1
+
+    plt.title('Histograma com a distribuição dos caminhos mínimos do grafo')
+    plt.xlabel('Caminhos mínimos')
+    plt.ylabel('Vértices')
+    plt.hist(qntCaminhos)
+    plt.show()
     
     
