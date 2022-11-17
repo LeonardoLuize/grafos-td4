@@ -43,26 +43,6 @@ class Grafo:
 
     return self.adjacency_list    
 
-
-  def adiciona_aresta_nao_direcionada(self, u,  v,  peso):
-    isDuplicated = False
-
-    if len(self.adjacency_list) > 0 and len(self.adjacency_list[u]) > 0:
-      index = 0
-      for adjacency in self.adjacency_list[u]:
-        if adjacency[0] == v:
-            list_adjacency = list(self.adjacency_list[u][index])
-            list_adjacency[1] += 1
-            self.adjacency_list[u][index] = tuple(list_adjacency)
-            isDuplicated = True
-
-        index += 1
-
-    if not isDuplicated:
-      self.adjacency_list[u].append((v, peso)) 
-
-    return self.adjacency_list    
-
   def tem_aresta(self, u, v):
     if len(self.adjacency_list[u]) == 0:
       return False
