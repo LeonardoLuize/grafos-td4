@@ -19,7 +19,8 @@ print("total arestas:", graph.total_arestas())
 print("total vertex:", graph.total_vertices())
 
 """ 04: Quantidade de componentes"""
-print("numero de componentes: ", graph.numberComponents())
+print("\n-- Num Componentes --")
+print("Numero de componentes: ", graph.numberComponents())
 
 """ 06: Criação da DAG """
 dag_obj = graph.cria_dag()
