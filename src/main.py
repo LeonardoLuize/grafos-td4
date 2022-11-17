@@ -5,9 +5,9 @@ reader = ReadFile()
 nw = Network()
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=8, max_edges=2, users_list=["A", "B", "C", "D", "E", "F", "G", "H"])
+graph = nw.generate_scale_graph(max_size=0, max_edges=2, users_list=["A", "B", "C", "D", "E", "F", "G", "H"])
 
-graph.imprime_lista_adjacencias()
+#graph.imprime_lista_adjacencias()
 
 """ 
 Separar exercícios por comentário
@@ -28,3 +28,10 @@ print("\n-- DAG --")
 print(f'DAG: { dag_obj["dag"] }')
 print(f'Edges to remove: { dag_obj["remove"] }')
 
+""" 07: Histograma Graus """
+print("\n-- Histograma Graus --")
+dag_obj = graph.histogramaGraus()
+
+""" 08: Histograma Caminhos """
+print("\n-- Histograma Caminhos --")
+dag_obj = graph.histogramaCaminhos()
