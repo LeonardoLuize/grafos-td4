@@ -11,7 +11,7 @@ class Network:
         self.graph = Grafo()
 
     def generate_scale_graph(self, max_edges: int, users_list: List[str], is_directed: bool = True, max_size: int = 0,)-> Grafo:
-        random_graph_size = 100
+        random_graph_size = 2
         random_graph = self.generate_random_graph(self.graph, users_list, random_graph_size)
 
         for index in range(random_graph_size, len(users_list)):
