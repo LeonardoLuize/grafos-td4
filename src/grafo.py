@@ -248,13 +248,16 @@ class Grafo:
       if len(self.adjacency_list[currentVertex]) == 0:
         stack.pop()
         if len(stack) == 0: break
+
         currentVertex = stack[len(stack) - 1]
         continue
 
       for neighbour in self.adjacency_list[currentVertex]:
+
         if neighbour[0] in visited:
           if count == (len(self.adjacency_list[currentVertex]) - 1):
             stack.pop()
+
             if len(stack) == 0: 
               isFinish = True
               break
@@ -270,6 +273,50 @@ class Grafo:
           break
 
     return visited
+
+
+  def numberComponents(self):
+
+    ordened_components = []
+    count_type = 0
+    components = []
+
+    for vertice in self.adjacency_list:
+      lstCurrentVertex = self.percorre_em_profundidade(vertice , [], [])
+      components.append(lstCurrentVertex)
+
+    for component in components:
+      isVisited = False
+
+      for visited in ordened_components:
+          if np.array_equal(visited["component"], component):
+              isVisited = True
+
+      if isVisited:
+          continue
+
+      for second_component in components:
+        intersection_component = list(set(component).intersection(set(second_component)))
+
+        if len(intersection_component) == len(component):
+          component_dict = {"component": second_component, "type": count_type}
+          ordened_components.append(component_dict)
+
+      count_type += 1
+
+    merged_components = []
+
+    for ordened in ordened_components:
+      is_equivalent = False
+
+      for merged in merged_components:
+          if merged["type"] == ordened["type"]:
+              is_equivalent = True
+
+      if not is_equivalent:
+          merged_components.append(ordened)
+
+    return len(merged_components)
 
   def x_alcanca_y_profundidade(self, x, y):
     start_time = time.time()
@@ -311,7 +358,7 @@ class Grafo:
         if len(menor_caminho_vertex) > len(maiorCaminhoMinimo):
           maiorCaminhoMinimo = menor_caminho_vertex
        
-    return maiorCaminhoMinimo
+    return maiorCaminhoMinimo    
 
   def Dijkstra(self, source_node, target_node):
     visited = []
