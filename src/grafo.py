@@ -160,22 +160,19 @@ class Grafo:
         j += 1
 
   def warshall(self):
-
     matrizAlcancabilidade = np.zeros((self.ordem, self.ordem))
-    for i in range(self.ordem):
-        for j in range(self.ordem):
-          if self.matrizAdjacencias[i][j] != np.inf:
-            matrizAlcancabilidade[i][j] = 1
-
-    print(f"M_0:\n {matrizAlcancabilidade}")
+    for i in range(1, self.ordem):
+      for j in range(1, len(self.adjacency_list[i])):
+        if self.adjacency_list[i][j] != np.inf:
+          matrizAlcancabilidade[i][j] = 1
 
     for k in range(self.ordem):
       for i in range(self.ordem):
         for j in range(self.ordem):
-          print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
-          #print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-      print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
+          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (
+            matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
+            
+    return matrizAlcancabilidade
 
 
   def possuiCaminho(self, u, v):
@@ -464,5 +461,4 @@ class Grafo:
     plt.ylabel('Vértices')
     plt.hist(qntCaminhos)
     plt.show()
-    
-    
+  
