@@ -1,7 +1,7 @@
-from functools import total_ordering
 import numpy as np
 from collections import defaultdict
 import time
+import matplotlib.pyplot as plt
 
 class Grafo:
   def __init__(self, is_directed:bool):
@@ -160,22 +160,19 @@ class Grafo:
         j += 1
 
   def warshall(self):
-
     matrizAlcancabilidade = np.zeros((self.ordem, self.ordem))
-    for i in range(self.ordem):
-        for j in range(self.ordem):
-          if self.matrizAdjacencias[i][j] != np.inf:
-            matrizAlcancabilidade[i][j] = 1
-
-    print(f"M_0:\n {matrizAlcancabilidade}")
+    for i in range(1, self.ordem):
+      for j in range(1, len(self.adjacency_list[i])):
+        if self.adjacency_list[i][j] != np.inf:
+          matrizAlcancabilidade[i][j] = 1
 
     for k in range(self.ordem):
       for i in range(self.ordem):
         for j in range(self.ordem):
-          print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
-          #print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-      print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
+          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (
+            matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
+            
+    return matrizAlcancabilidade
 
 
   def possuiCaminho(self, u, v):
@@ -249,13 +246,16 @@ class Grafo:
       if len(self.adjacency_list[currentVertex]) == 0:
         stack.pop()
         if len(stack) == 0: break
+
         currentVertex = stack[len(stack) - 1]
         continue
 
       for neighbour in self.adjacency_list[currentVertex]:
+
         if neighbour[0] in visited:
           if count == (len(self.adjacency_list[currentVertex]) - 1):
             stack.pop()
+
             if len(stack) == 0: 
               isFinish = True
               break
@@ -271,6 +271,50 @@ class Grafo:
           break
 
     return visited
+
+
+  def numberComponents(self):
+
+    ordened_components = []
+    count_type = 0
+    components = []
+
+    for vertice in self.adjacency_list:
+      lstCurrentVertex = self.percorre_em_profundidade(vertice , [], [])
+      components.append(lstCurrentVertex)
+
+    for component in components:
+      isVisited = False
+
+      for visited in ordened_components:
+          if np.array_equal(visited["component"], component):
+              isVisited = True
+
+      if isVisited:
+          continue
+
+      for second_component in components:
+        intersection_component = list(set(component).intersection(set(second_component)))
+
+        if len(intersection_component) == len(component):
+          component_dict = {"component": second_component, "type": count_type}
+          ordened_components.append(component_dict)
+
+      count_type += 1
+
+    merged_components = []
+
+    for ordened in ordened_components:
+      is_equivalent = False
+
+      for merged in merged_components:
+          if merged["type"] == ordened["type"]:
+              is_equivalent = True
+
+      if not is_equivalent:
+          merged_components.append(ordened)
+
+    return len(merged_components)
 
   def x_alcanca_y_profundidade(self, x, y):
     start_time = time.time()
@@ -312,7 +356,7 @@ class Grafo:
         if len(menor_caminho_vertex) > len(maiorCaminhoMinimo):
           maiorCaminhoMinimo = menor_caminho_vertex
        
-    return maiorCaminhoMinimo
+    return maiorCaminhoMinimo    
 
   def Dijkstra(self, source_node, target_node):
     visited = []
@@ -359,7 +403,7 @@ class Grafo:
 
 
   def numero_vertices(self):
-        return len(self.adjacency_list.keys())
+    return len(self.adjacency_list.keys())
 
 
   def pajek(self):    
@@ -387,3 +431,64 @@ class Grafo:
         adjacency_list.write(origem + " " + destino + "\n") 
 
       
+  def cria_dag(self):
+    visited = []
+    dag = []
+    count = 0
+    removed_vertex = []
+
+    while self.ordem != len(visited):
+      for vertex in self.adjacency_list:
+        has_dependence = False
+
+        if vertex in visited:
+          continue
+
+        for second_vertex in self.adjacency_list:
+          if second_vertex in visited or vertex == second_vertex:
+            continue
+
+          for adjacency in self.adjacency_list[second_vertex]:              
+            if vertex == adjacency[0]:
+              if count > 5:
+                removed_vertex.append({"vertex": vertex, "second_vertex": second_vertex})
+                continue
+
+              has_dependence = True
+              break
+        
+        if not has_dependence:
+          visited.append(vertex)
+      
+      count += 1
+
+    dag = {"dag": visited, "remove": removed_vertex}
+    return dag
+  
+  def histogramaGraus(self):
+    listaGraus = []
+
+    for cada in self.adjacency_list:
+      listaGraus.append(self.grau(cada))
+
+    plt.title('Histograma com a distribuição de graus do grafo')
+    plt.xlabel('Graus')
+    plt.ylabel('Vértices')
+    plt.hist(listaGraus)
+    plt.show()
+
+  def histogramaCaminhos(self):
+    matrizCaminhos = self.warshall()
+    qntCaminhos = []
+
+    index = 0
+    while index < len(matrizCaminhos):
+      qntCaminhos.append(sum(matrizCaminhos[index]))
+      index += 1
+
+    plt.title('Histograma com a distribuição dos caminhos mínimos do grafo')
+    plt.xlabel('Caminhos mínimos')
+    plt.ylabel('Vértices')
+    plt.hist(qntCaminhos)
+    plt.show()
+  
