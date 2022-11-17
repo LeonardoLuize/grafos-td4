@@ -10,9 +10,8 @@ graph = nw.generate_scale_graph(max_size=0, max_edges=1, users_list=['A', 'B', '
 print("total arestas:", graph.total_arestas())
 print("total vertex:", graph.total_vertices())
 
-graph.imprime_lista_adjacencias()
+# graph.imprime_lista_adjacencias()
 
-#print(graph.percorre_em_profundidade('A', [], []))
 
 # from grafo import Grafo
 
@@ -25,7 +24,9 @@ graph.imprime_lista_adjacencias()
 # G.adiciona_vertice("F")
 
 # G.adiciona_aresta("A", "B", 1)
+# G.adiciona_aresta("A", "D", 1)
 # G.adiciona_aresta("B", "A", 1)
+# G.adiciona_aresta("B", "C", 1)
 # G.adiciona_aresta("C", "B", 1)
 # G.adiciona_aresta("D", "A", 1)
 
