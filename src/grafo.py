@@ -1,4 +1,3 @@
-from functools import total_ordering
 import numpy as np
 from collections import defaultdict
 import time
