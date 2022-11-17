@@ -1,7 +1,7 @@
-from functools import total_ordering
 import numpy as np
 from collections import defaultdict
 import time
+import matplotlib.pyplot as plt
 
 class Grafo:
   def __init__(self):
@@ -159,22 +159,19 @@ class Grafo:
         j += 1
 
   def warshall(self):
-
     matrizAlcancabilidade = np.zeros((self.ordem, self.ordem))
-    for i in range(self.ordem):
-        for j in range(self.ordem):
-          if self.matrizAdjacencias[i][j] != np.inf:
-            matrizAlcancabilidade[i][j] = 1
-
-    print(f"M_0:\n {matrizAlcancabilidade}")
+    for i in range(1, self.ordem):
+      for j in range(1, len(self.adjacency_list[i])):
+        if self.adjacency_list[i][j] != np.inf:
+          matrizAlcancabilidade[i][j] = 1
 
     for k in range(self.ordem):
       for i in range(self.ordem):
         for j in range(self.ordem):
-          print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
-          #print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-      print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
+          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (
+            matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
+            
+    return matrizAlcancabilidade
 
 
   def possuiCaminho(self, u, v):
@@ -436,5 +433,31 @@ class Grafo:
 
     dag = {"dag": visited, "remove": removed_vertex}
     return dag
-    
-    
+  
+  def histogramaGraus(self):
+    listaGraus = []
+
+    for cada in self.adjacency_list:
+      listaGraus.append(self.grau(cada))
+
+    plt.title('Histograma com a distribuição de graus do grafo')
+    plt.xlabel('Graus')
+    plt.ylabel('Vértices')
+    plt.hist(listaGraus)
+    plt.show()
+
+  def histogramaCaminhos(self):
+    matrizCaminhos = self.warshall()
+    qntCaminhos = []
+
+    index = 0
+    while index < len(matrizCaminhos):
+      qntCaminhos.append(sum(matrizCaminhos[index]))
+      index += 1
+
+    plt.title('Histograma com a distribuição dos caminhos mínimos do grafo')
+    plt.xlabel('Caminhos mínimos')
+    plt.ylabel('Vértices')
+    plt.hist(qntCaminhos)
+    plt.show()
+  
