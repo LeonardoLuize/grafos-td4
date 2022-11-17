@@ -5,31 +5,25 @@ reader = ReadFile()
 nw = Network()
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=0, max_edges=1, users_list=['A', 'B', 'C', 'D', 'E', 'F'], is_directed=False)
+graph = nw.generate_scale_graph(max_size=8, max_edges=2, users_list=["A", "B", "C", "D", "E", "F", "G", "H"])
 
+graph.imprime_lista_adjacencias()
+
+""" 
+Separar exercícios por comentário
+"""
+
+""" 01: Geração por escala livre, info dos dados """
+print("\n-- info --")
 print("total arestas:", graph.total_arestas())
 print("total vertex:", graph.total_vertices())
 
-# graph.imprime_lista_adjacencias()
-
-
-# from grafo import Grafo
-
-# G = Grafo()
-# G.adiciona_vertice("A")
-# G.adiciona_vertice("B")
-# G.adiciona_vertice("C")
-# G.adiciona_vertice("D")
-# G.adiciona_vertice("E")
-# G.adiciona_vertice("F")
-
-# G.adiciona_aresta("A", "B", 1)
-# G.adiciona_aresta("A", "D", 1)
-# G.adiciona_aresta("B", "A", 1)
-# G.adiciona_aresta("B", "C", 1)
-# G.adiciona_aresta("C", "B", 1)
-# G.adiciona_aresta("D", "A", 1)
-
-# G.imprime_lista_adjacencias()
-
+""" 04: Quantidade de componentes"""
 print("numero de componentes: ", graph.numberComponents())
+
+""" 06: Criação da DAG """
+dag_obj = graph.cria_dag()
+print("\n-- DAG --")
+print(f'DAG: { dag_obj["dag"] }')
+print(f'Edges to remove: { dag_obj["remove"] }')
+

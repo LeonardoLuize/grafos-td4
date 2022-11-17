@@ -422,3 +422,39 @@ class Grafo:
         break
 
     return caminho
+
+  def cria_dag(self):
+    visited = []
+    dag = []
+    count = 0
+    removed_vertex = []
+
+    while self.ordem != len(visited):
+      for vertex in self.adjacency_list:
+        has_dependence = False
+
+        if vertex in visited:
+          continue
+
+        for second_vertex in self.adjacency_list:
+          if second_vertex in visited or vertex == second_vertex:
+            continue
+
+          for adjacency in self.adjacency_list[second_vertex]:              
+            if vertex == adjacency[0]:
+              if count > 5:
+                removed_vertex.append({"vertex": vertex, "second_vertex": second_vertex})
+                continue
+
+              has_dependence = True
+              break
+        
+        if not has_dependence:
+          visited.append(vertex)
+      
+      count += 1
+
+    dag = {"dag": visited, "remove": removed_vertex}
+    return dag
+    
+    
