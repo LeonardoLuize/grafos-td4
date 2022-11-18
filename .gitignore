@@ -3,6 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 
+pajek.net
+
 # C extensions
 *.so
 

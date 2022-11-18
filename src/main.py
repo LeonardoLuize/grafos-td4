@@ -2,10 +2,10 @@ from readFile import ReadFile
 from Network import Network
 
 reader = ReadFile()
-nw = Network()
+nw = Network(True)
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=0, max_edges=2, users_list=["A", "B", "C", "D", "E", "F", "G", "H"])
+graph = nw.generate_scale_graph(max_size=0, max_edges=5, users_list=users_list, random_graph_size=100)
 
 #graph.imprime_lista_adjacencias()
 
@@ -17,6 +17,10 @@ Separar exercícios por comentário
 print("\n-- info --")
 print("total arestas:", graph.total_arestas())
 print("total vertex:", graph.total_vertices())
+
+""" 02: Pajek"""
+print("\n-- Criação Pajek --")
+print(graph.pajek())
 
 """ 04: Quantidade de componentes"""
 print("\n-- Num Componentes --")

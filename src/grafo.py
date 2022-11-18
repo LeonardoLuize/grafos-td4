@@ -4,7 +4,8 @@ import time
 import matplotlib.pyplot as plt
 
 class Grafo:
-  def __init__(self):
+  def __init__(self, is_directed:bool):
+    self.is_directed = is_directed
     self.adjacency_list = defaultdict(list) 
     self.ordem = 0
     self.tamanho = 0
@@ -400,6 +401,36 @@ class Grafo:
 
     return caminho
 
+
+  def numero_vertices(self):
+    return len(self.adjacency_list.keys())
+
+
+  def pajek(self):    
+      adjacency_list = open("pajek.net", "w")
+      n = 1
+      adjacency_list.write("*vertices" + " " +  str(self.numero_vertices()) + "\n")
+
+      for vertice in self.adjacency_list:
+        tupla = (n, vertice)
+        adjacency_list.write('"' + str(n) + " " + vertice + '"' + "\n")
+        vertex_list = self.percorre_em_profundidade(vertice, [], [])
+        n += 1
+
+      if self.is_directed:
+          adjacency_list.write("edges")
+      else:
+          adjacency_list.write("arcs")
+
+      for vertice in self.adjacency_list:
+        tupla = (n, vertice)
+        vertex_list = self.percorre_em_profundidade(vertice, [], [])
+        origem = vertice
+        destino = vertex_list[len(vertex_list) - 1]  
+        n += 1
+        adjacency_list.write(origem + " " + destino + "\n") 
+
+      
   def cria_dag(self):
     visited = []
     dag = []

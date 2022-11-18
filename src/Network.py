@@ -3,15 +3,18 @@ from grafo import Grafo
 import random
 
 class Network:
-
     graph: Grafo
     length: int
 
-    def __init__(self):
-        self.graph = Grafo()
+    def __init__(self, is_directed:bool):
+        self.graph = Grafo(is_directed)
 
-    def generate_scale_graph(self, max_edges: int, users_list: List[str], is_directed: bool = True, max_size: int = 0,)-> Grafo:
-        random_graph_size = 2
+    def generate_scale_graph(self, max_edges: int, users_list: List[str], max_size: int = 0, random_graph_size: int = 0)-> Grafo:
+
+        if random_graph_size == 0:
+            random_graph_size = len(users_list) // 5
+            print(random_graph_size)
+
         random_graph = self.generate_random_graph(self.graph, users_list, random_graph_size)
 
         for index in range(random_graph_size, len(users_list)):
@@ -32,7 +35,7 @@ class Network:
                     random_weight = random.randint(0,100)
                     random_graph.adiciona_aresta(current_node, vertex, random_weight)
 
-                    if not is_directed:
+                    if not self.graph.is_directed:
                         random_graph.adiciona_aresta(vertex, current_node, random_weight)
 
                     steps += 1
