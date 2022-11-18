@@ -9,8 +9,12 @@ class Network:
     def __init__(self, is_directed:bool):
         self.graph = Grafo(is_directed)
 
-    def generate_scale_graph(self, max_edges: int, users_list: List[str], max_size: int = 0,)-> Grafo:
-        random_graph_size = 100
+    def generate_scale_graph(self, max_edges: int, users_list: List[str], max_size: int = 0, random_graph_size: int = 0)-> Grafo:
+
+        if random_graph_size == 0:
+            random_graph_size = len(users_list) // 5
+            print(random_graph_size)
+
         random_graph = self.generate_random_graph(self.graph, users_list, random_graph_size)
 
         for index in range(random_graph_size, len(users_list)):
