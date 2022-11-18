@@ -5,7 +5,7 @@ reader = ReadFile()
 nw = Network(True)
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=1000, max_edges=5, users_list=users_list, random_graph_size=100)
+graph = nw.generate_scale_graph(max_size=100, max_edges=5, users_list=users_list, random_graph_size=100)
 
 while True:
     print("\n--- Menu ---")
@@ -15,6 +15,7 @@ while True:
     print("| 6. DAG")
     print("| 7. Histograma Graus")
     print("| 8. Histograma Caminhos")
+    print("| 10. Centralidade de Proximidade")
     print("| 0. Sair")
 
     selected = int(input("\nSelecione uma opção: "))
@@ -54,3 +55,9 @@ while True:
         """ 08: Histograma Caminhos """
         print("\n-- Histograma Caminhos --")
         dag_obj = graph.histogramaCaminhos()
+
+    elif selected == 10:
+        """ 10: Centralidade de Proximidade """
+        print("\n-- Centralidade de Proximidade --")
+        major_proximity = graph.centralidade_proximidade()
+        print(f'{major_proximity["vertex"]}: {major_proximity["value"]}')
