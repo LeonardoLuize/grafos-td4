@@ -5,7 +5,7 @@ reader = ReadFile()
 nw = Network(True)
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=1000, max_edges=5, users_list=users_list, random_graph_size=100)
+graph = nw.generate_scale_graph(max_size=0, max_edges=5, users_list=["A", "B", "C", "D", "E", "F", "G", "H"], random_graph_size=5)
 
 while True:
     print("\n--- Menu ---")
@@ -59,4 +59,5 @@ while True:
     elif selected == 10:
         """ 10: Centralidade de Proximidade """
         print("\n-- Centralidade de Proximidade --")
-        dag_obj = graph.centralidade_proximidade()
+        major_proximity = graph.centralidade_proximidade()
+        print(f'{major_proximity["vertex"]}: {major_proximity["value"]}')
