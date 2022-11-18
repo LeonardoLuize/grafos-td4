@@ -15,6 +15,7 @@ while True:
     print("| 6. DAG")
     print("| 7. Histograma Graus")
     print("| 8. Histograma Caminhos")
+    print("| 10. Centralidade de Proximidade")
     print("| 0. Sair")
 
     selected = int(input("\nSelecione uma opção: "))
@@ -54,3 +55,8 @@ while True:
         """ 08: Histograma Caminhos """
         print("\n-- Histograma Caminhos --")
         dag_obj = graph.histogramaCaminhos()
+
+    elif selected == 10:
+        """ 10: Centralidade de Proximidade """
+        print("\n-- Centralidade de Proximidade --")
+        dag_obj = graph.centralidade_proximidade()

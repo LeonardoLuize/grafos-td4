@@ -492,3 +492,5 @@ class Grafo:
     plt.hist(qntCaminhos)
     plt.show()
   
+  def centralidade_proximidade():
+    pass
