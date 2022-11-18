@@ -7,12 +7,6 @@ nw = Network(True)
 users_list = reader.readFilesLines("./src/Users.txt")
 graph = nw.generate_scale_graph(max_size=1000, max_edges=5, users_list=users_list, random_graph_size=100)
 
-#graph.imprime_lista_adjacencias()
-
-""" 
-Separar exercícios por comentário
-"""
-
 while True:
     print("\n--- Menu ---")
     print("| 1. info do grafo")
@@ -30,6 +24,7 @@ while True:
     elif selected == 1:
         """ 01: Geração por escala livre, info dos dados """
         print("\n-- info --")
+        graph.imprime_lista_adjacencias()
         print("total arestas:", graph.total_arestas())
         print("total vertex:", graph.total_vertices())
         
