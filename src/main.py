@@ -5,7 +5,7 @@ reader = ReadFile()
 nw = Network(True)
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=0, max_edges=5, users_list=["A", "B", "C", "D", "E", "F", "G", "H"], random_graph_size=5)
+graph = nw.generate_scale_graph(max_size=100, max_edges=5, users_list=users_list, random_graph_size=100)
 
 while True:
     print("\n--- Menu ---")
