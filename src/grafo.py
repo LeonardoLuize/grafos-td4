@@ -532,6 +532,16 @@ class Grafo:
 
     return (occurrences / len(caminhos))
   
+  def remove_aresta(self, vertex, target):
+    count = 0
+
+    for child_vertex in self.adjacency_list[vertex]:
+      if child_vertex[0] == target:
+        self.adjacency_list[vertex].pop(count)
+        break
+      
+      count += 1
+
   def arvoreMinima(self):
     tree = Grafo(self.ordem)
     tree.adjacency_list = self.adjacency_list

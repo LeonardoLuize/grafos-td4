@@ -16,6 +16,7 @@ while True:
     print("| 7. Histograma Graus")
     print("| 8. Histograma Caminhos")
     print("| 10. Centralidade de Proximidade")
+    print("| 12. Árvore mínima")
     print("| 0. Sair")
 
     selected = int(input("\nSelecione uma opção: "))
@@ -61,3 +62,8 @@ while True:
         print("\n-- Centralidade de Proximidade --")
         major_proximity = graph.centralidade_proximidade()
         print(f'{major_proximity["vertex"]}: {major_proximity["value"]}')
+
+    elif selected == 12:
+        """ 12: Árvore mínima """
+        print("\n-- Árvore mínima --")
+        graph.arvoreMinima()
