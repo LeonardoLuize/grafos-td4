@@ -2,6 +2,7 @@ import numpy as np
 from collections import defaultdict
 import time
 import matplotlib.pyplot as plt
+import operator
 
 class Grafo:
   def __init__(self, is_directed:bool):
@@ -530,3 +531,49 @@ class Grafo:
           visited.append(f"{vertex}-{second_vertex}")
 
     return (occurrences / len(caminhos))
+  
+  def arvoreMinima(self):
+    tree = Grafo(self.ordem)
+    tree.adjacency_list = self.adjacency_list
+    dict_arestas = {}
+
+    for vertice in tree.adjacency_list:
+      while len(tree.adjacency_list[vertice]) > 0:
+        aresta = tree.adjacency_list[vertice][0]
+        vizinho = aresta[0]
+        peso = aresta[1]
+        dict_arestas[vertice + vizinho] = peso
+        tree.remove_aresta(vertice, vizinho)
+
+    dict_arestas = dict(
+      sorted(dict_arestas.items(), key=operator.itemgetter(1)))
+
+    for aresta in dict_arestas:
+
+      if tree.total_arestas() <= tree.ordem - 1:
+        peso = dict_arestas[aresta]
+
+        tree.adiciona_aresta(aresta[0], aresta[1], peso)
+        if tree.tem_ciclo():
+          tree.remove_aresta(aresta[0], aresta[1])
+
+    return tree.imprime_lista_adjacencias()
+
+  def tem_ciclo(self):
+    for u in self.adjacency_list:
+      vizinho = u[0]
+
+      if self.recursiva_ciclo(vizinho, u):
+        return True
+
+    return False
+
+  def recursiva_ciclo(self, node, parent):
+    for i in self.adjacency_list[node]:
+      if i[0] == parent:
+        return True
+      else:
+        if self.recursiva_ciclo(i[0], node):
+          return True
+
+    return False
