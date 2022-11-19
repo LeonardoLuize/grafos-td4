@@ -57,6 +57,12 @@ while True:
         print("\n-- Histograma Caminhos --")
         dag_obj = graph.histogramaCaminhos()
 
+    elif selected == 9:
+        """09: Centralidade de Intermediação"""
+        print("\n-- Centralidade de Intermediacao --")
+        major_centrality = graph.centralidade_intermediacao()
+        print(f'{major_centrality["vertex"]}: {major_centrality["value"]}')
+
     elif selected == 10:
         """ 10: Centralidade de Proximidade """
         print("\n-- Centralidade de Proximidade --")

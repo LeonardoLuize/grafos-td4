@@ -587,3 +587,43 @@ class Grafo:
           return True
 
     return False
+
+    
+  def centralidade_intermediacao(self):
+    centrality_vertex = ""
+    major_proximity = 0
+
+    for vertex in self.adjacency_list:
+      new_proximity = self.calcula_intermediacao(vertex)
+
+      if new_proximity > major_proximity:
+        centrality_vertex = vertex
+        major_proximity = new_proximity
+
+    return {"vertex": centrality_vertex, "value": major_proximity}
+
+  def calcula_intermediacao(self, target: str):
+    caminhos = []
+    visited = []
+    occurrences = 0
+
+    for vertex in self.adjacency_list:
+      if vertex == target:
+        continue
+   
+      for second_vertex in self.adjacency_list:
+          if second_vertex == target or vertex == second_vertex:
+            continue
+
+          if f"{vertex}-{second_vertex}" in visited or f"{second_vertex}-{vertex}" in visited:
+            continue
+
+          betweenness = self.Dijkstra(vertex, second_vertex)
+
+          if target in betweenness:
+            occurrences += 1
+
+          caminhos.append(betweenness)
+          visited.append(f"{vertex}-{second_vertex}")
+
+    return (occurrences * occurrences - 1 / 2)
