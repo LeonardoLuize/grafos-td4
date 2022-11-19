@@ -25,13 +25,16 @@ class Network:
             if max_size != 0 and index > max_size:
                 break
 
-            for vertex in random_graph.adjacency_list:
-                probability = random.randint(0,len(vertex))
-                
+            for vertex in random_graph.adjacency_list:                
                 if steps >= max_edges:
                     break
 
-                if probability != 0:
+                high_order = self.get_high_order(random_graph)
+                probability = self.get_probability(high_order, len(random_graph.adjacency_list[vertex]))
+
+                random_value = random.randint(0,high_order)
+
+                if random_value <= ((probability/100) * high_order):
                     random_weight = random.randint(0,100)
                     random_graph.adiciona_aresta(current_node, vertex, random_weight)
 
@@ -42,6 +45,20 @@ class Network:
 
         self.graph = random_graph
         return self.graph
+
+    def get_high_order(self, graph: Grafo):
+        max_order = 0
+
+        for vertex in graph.adjacency_list:
+            current_order = len(graph.adjacency_list[vertex])
+            if current_order > max_order:
+                max_order = current_order
+
+        return max_order
+
+
+    def get_probability(self, high_probability: int, target: int):
+        return (target * 100) / high_probability
 
     def generate_random_graph(self, random_graph: Grafo, users_list: List[str], size: int):
         for index in range(size):
