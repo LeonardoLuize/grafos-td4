@@ -3,15 +3,18 @@ from grafo import Grafo
 import random
 
 class Network:
-
     graph: Grafo
     length: int
 
-    def __init__(self):
-        self.graph = Grafo()
+    def __init__(self, is_directed:bool):
+        self.graph = Grafo(is_directed)
 
-    def generate_scale_graph(self, max_edges: int, users_list: List[str], is_directed: bool = True, max_size: int = 0,)-> Grafo:
-        random_graph_size = 2
+    def generate_scale_graph(self, max_edges: int, users_list: List[str], max_size: int = 0, random_graph_size: int = 0)-> Grafo:
+
+        if random_graph_size == 0:
+            random_graph_size = len(users_list) // 5
+            print(random_graph_size)
+
         random_graph = self.generate_random_graph(self.graph, users_list, random_graph_size)
 
         for index in range(random_graph_size, len(users_list)):
@@ -22,23 +25,40 @@ class Network:
             if max_size != 0 and index > max_size:
                 break
 
-            for vertex in random_graph.adjacency_list:
-                probability = random.randint(0,len(vertex))
-                
+            for vertex in random_graph.adjacency_list:                
                 if steps >= max_edges:
                     break
 
-                if probability != 0:
+                high_order = self.get_high_order(random_graph)
+                probability = self.get_probability(high_order, len(random_graph.adjacency_list[vertex]))
+
+                random_value = random.randint(0,high_order)
+
+                if random_value <= ((probability/100) * high_order):
                     random_weight = random.randint(0,100)
                     random_graph.adiciona_aresta(current_node, vertex, random_weight)
 
-                    if not is_directed:
+                    if not self.graph.is_directed:
                         random_graph.adiciona_aresta(vertex, current_node, random_weight)
 
                     steps += 1
 
         self.graph = random_graph
         return self.graph
+
+    def get_high_order(self, graph: Grafo):
+        max_order = 0
+
+        for vertex in graph.adjacency_list:
+            current_order = len(graph.adjacency_list[vertex])
+            if current_order > max_order:
+                max_order = current_order
+
+        return max_order
+
+
+    def get_probability(self, high_probability: int, target: int):
+        return (target * 100) / high_probability
 
     def generate_random_graph(self, random_graph: Grafo, users_list: List[str], size: int):
         for index in range(size):
