@@ -2,29 +2,74 @@ from readFile import ReadFile
 from Network import Network
 
 reader = ReadFile()
-nw = Network()
+nw = Network(True)
 
 users_list = reader.readFilesLines("./src/Users.txt")
-graph = nw.generate_scale_graph(max_size=8, max_edges=2, users_list=["A", "B", "C", "D", "E", "F", "G", "H"])
+graph = nw.generate_scale_graph(max_size=100, max_edges=5, users_list=users_list, random_graph_size=100)
 
-graph.imprime_lista_adjacencias()
+while True:
+    print("\n--- Menu ---")
+    print("| 1. info do grafo")
+    print("| 2. Criação Pajek")
+    print("| 4. Quantidade de componentes")
+    print("| 6. DAG")
+    print("| 7. Histograma Graus")
+    print("| 8. Histograma Caminhos")
+    print("| 10. Centralidade de Proximidade")
+    print("| 12. Árvore mínima")
+    print("| 0. Sair")
 
-""" 
-Separar exercícios por comentário
-"""
+    selected = int(input("\nSelecione uma opção: "))
 
-""" 01: Geração por escala livre, info dos dados """
-print("\n-- info --")
-print("total arestas:", graph.total_arestas())
-print("total vertex:", graph.total_vertices())
+    if selected == 0:
+        break
+    elif selected == 1:
+        """ 01: Geração por escala livre, info dos dados """
+        print("\n-- info --")
+        graph.imprime_lista_adjacencias()
+        print("total arestas:", graph.total_arestas())
+        print("total vertex:", graph.total_vertices())
+        
+    elif selected == 2:
+        """ 02: Pajek"""
+        print("\n-- Criação Pajek --")
+        print(graph.pajek())
 
-""" 04: Quantidade de componentes"""
-print("\n-- Num Componentes --")
-print("Numero de componentes: ", graph.numberComponents())
+    elif selected == 4:
+        """ 04: Quantidade de componentes"""
+        print("\n-- Num Componentes --")
+        print("Numero de componentes: ", graph.numberComponents())
 
-""" 06: Criação da DAG """
-dag_obj = graph.cria_dag()
-print("\n-- DAG --")
-print(f'DAG: { dag_obj["dag"] }')
-print(f'Edges to remove: { dag_obj["remove"] }')
+    elif selected == 6:
+        """ 06: Criação da DAG """
+        dag_obj = graph.cria_dag()
+        print("\n-- DAG --")
+        print(f'DAG: { dag_obj["dag"] }')
+        print(f'Edges to remove: { dag_obj["remove"] }')
 
+    elif selected == 7:
+        """ 07: Histograma Graus """
+        print("\n-- Histograma Graus --")
+        dag_obj = graph.histogramaGraus()
+
+    elif selected == 8:
+        """ 08: Histograma Caminhos """
+        print("\n-- Histograma Caminhos --")
+        dag_obj = graph.histogramaCaminhos()
+
+    elif selected == 9:
+        """09: Centralidade de Intermediação"""
+        print("\n-- Centralidade de Intermediacao --")
+        major_centrality = graph.centralidade_intermediacao()
+        print(f'{major_centrality["vertex"]}: {major_centrality["value"]}')
+
+    elif selected == 10:
+        """ 10: Centralidade de Proximidade """
+        print("\n-- Centralidade de Proximidade --")
+        major_proximity = graph.centralidade_proximidade()
+        print(f'{major_proximity["vertex"]}: {major_proximity["value"]}')
+
+    elif selected == 12:
+        """ 12: Árvore mínima """
+        print("\n-- Árvore mínima --")
+        graph.arvoreMinima()

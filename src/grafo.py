@@ -1,10 +1,12 @@
-from functools import total_ordering
 import numpy as np
 from collections import defaultdict
 import time
+import matplotlib.pyplot as plt
+import operator
 
 class Grafo:
-  def __init__(self):
+  def __init__(self, is_directed:bool):
+    self.is_directed = is_directed
     self.adjacency_list = defaultdict(list) 
     self.ordem = 0
     self.tamanho = 0
@@ -159,22 +161,19 @@ class Grafo:
         j += 1
 
   def warshall(self):
-
     matrizAlcancabilidade = np.zeros((self.ordem, self.ordem))
-    for i in range(self.ordem):
-        for j in range(self.ordem):
-          if self.matrizAdjacencias[i][j] != np.inf:
-            matrizAlcancabilidade[i][j] = 1
-
-    print(f"M_0:\n {matrizAlcancabilidade}")
+    for i in range(1, self.ordem):
+      for j in range(1, len(self.adjacency_list[i])):
+        if self.adjacency_list[i][j] != np.inf:
+          matrizAlcancabilidade[i][j] = 1
 
     for k in range(self.ordem):
       for i in range(self.ordem):
         for j in range(self.ordem):
-          print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
-          #print(f"M[{i}, {j}] <-- M[{i}, {j}] or (M[{i}, {k}] and M[{k}, {j}])")
-      print(f"M_{k+1}: \n {matrizAlcancabilidade} \n")
+          matrizAlcancabilidade[i][j] = matrizAlcancabilidade[i][j] or (
+            matrizAlcancabilidade[i][j] and matrizAlcancabilidade[i][j])
+            
+    return matrizAlcancabilidade
 
 
   def possuiCaminho(self, u, v):
@@ -403,6 +402,36 @@ class Grafo:
 
     return caminho
 
+
+  def numero_vertices(self):
+    return len(self.adjacency_list.keys())
+
+
+  def pajek(self):    
+      adjacency_list = open("pajek.net", "w")
+      n = 1
+      adjacency_list.write("*vertices" + " " +  str(self.numero_vertices()) + "\n")
+
+      for vertice in self.adjacency_list:
+        tupla = (n, vertice)
+        adjacency_list.write('"' + str(n) + " " + vertice + '"' + "\n")
+        vertex_list = self.percorre_em_profundidade(vertice, [], [])
+        n += 1
+
+      if self.is_directed:
+          adjacency_list.write("edges")
+      else:
+          adjacency_list.write("arcs")
+
+      for vertice in self.adjacency_list:
+        tupla = (n, vertice)
+        vertex_list = self.percorre_em_profundidade(vertice, [], [])
+        origem = vertice
+        destino = vertex_list[len(vertex_list) - 1]  
+        n += 1
+        adjacency_list.write(origem + " " + destino + "\n") 
+
+      
   def cria_dag(self):
     visited = []
     dag = []
@@ -436,5 +465,165 @@ class Grafo:
 
     dag = {"dag": visited, "remove": removed_vertex}
     return dag
+  
+  def histogramaGraus(self):
+    listaGraus = []
+
+    for cada in self.adjacency_list:
+      listaGraus.append(self.grau(cada))
+
+    plt.title('Histograma com a distribuição de graus do grafo')
+    plt.xlabel('Graus')
+    plt.ylabel('Vértices')
+    plt.hist(listaGraus)
+    plt.show()
+
+  def histogramaCaminhos(self):
+    matrizCaminhos = self.warshall()
+    qntCaminhos = []
+
+    index = 0
+    while index < len(matrizCaminhos):
+      qntCaminhos.append(sum(matrizCaminhos[index]))
+      index += 1
+
+    plt.title('Histograma com a distribuição dos caminhos mínimos do grafo')
+    plt.xlabel('Caminhos mínimos')
+    plt.ylabel('Vértices')
+    plt.hist(qntCaminhos)
+    plt.show()
+  
+  def centralidade_proximidade(self):
+    centrality_vertex = ""
+    major_proximity = 0
+
+    for vertex in self.adjacency_list:
+      new_proximity = self.calcula_proximidade(vertex)
+
+      if new_proximity > major_proximity:
+        centrality_vertex = vertex
+        major_proximity = new_proximity
+
+    return {"vertex": centrality_vertex, "value": major_proximity}
     
+  def calcula_proximidade(self, target: str):
+    caminhos = []
+    visited = []
+    occurrences = 0
+
+    for vertex in self.adjacency_list:
+      if vertex == target:
+        continue
+      
+      for second_vertex in self.adjacency_list:
+          if second_vertex == target or vertex == second_vertex:
+            continue
+
+          if f"{vertex}-{second_vertex}" in visited or f"{second_vertex}-{vertex}" in visited:
+            continue
+
+          menor_caminho = self.Dijkstra(vertex, second_vertex)
+
+          if target in menor_caminho:
+            occurrences += 1
+
+          caminhos.append(menor_caminho)
+          visited.append(f"{vertex}-{second_vertex}")
+
+    return (occurrences / len(caminhos))
+  
+  def remove_aresta(self, vertex, target):
+    count = 0
+
+    for child_vertex in self.adjacency_list[vertex]:
+      if child_vertex[0] == target:
+        self.adjacency_list[vertex].pop(count)
+        break
+      
+      count += 1
+
+  def arvoreMinima(self):
+    tree = Grafo(self.ordem)
+    tree.adjacency_list = self.adjacency_list
+    dict_arestas = {}
+
+    for vertice in tree.adjacency_list:
+      while len(tree.adjacency_list[vertice]) > 0:
+        aresta = tree.adjacency_list[vertice][0]
+        vizinho = aresta[0]
+        peso = aresta[1]
+        dict_arestas[vertice + vizinho] = peso
+        tree.remove_aresta(vertice, vizinho)
+
+    dict_arestas = dict(
+      sorted(dict_arestas.items(), key=operator.itemgetter(1)))
+
+    for aresta in dict_arestas:
+
+      if tree.total_arestas() <= tree.ordem - 1:
+        peso = dict_arestas[aresta]
+
+        tree.adiciona_aresta(aresta[0], aresta[1], peso)
+        if tree.tem_ciclo():
+          tree.remove_aresta(aresta[0], aresta[1])
+
+    return tree.imprime_lista_adjacencias()
+
+  def tem_ciclo(self):
+    for u in self.adjacency_list:
+      vizinho = u[0]
+
+      if self.recursiva_ciclo(vizinho, u):
+        return True
+
+    return False
+
+  def recursiva_ciclo(self, node, parent):
+    for i in self.adjacency_list[node]:
+      if i[0] == parent:
+        return True
+      else:
+        if self.recursiva_ciclo(i[0], node):
+          return True
+
+    return False
+
     
+  def centralidade_intermediacao(self):
+    centrality_vertex = ""
+    major_proximity = 0
+
+    for vertex in self.adjacency_list:
+      new_proximity = self.calcula_intermediacao(vertex)
+
+      if new_proximity > major_proximity:
+        centrality_vertex = vertex
+        major_proximity = new_proximity
+
+    return {"vertex": centrality_vertex, "value": major_proximity}
+
+  def calcula_intermediacao(self, target: str):
+    caminhos = []
+    visited = []
+    occurrences = 0
+
+    for vertex in self.adjacency_list:
+      if vertex == target:
+        continue
+   
+      for second_vertex in self.adjacency_list:
+          if second_vertex == target or vertex == second_vertex:
+            continue
+
+          if f"{vertex}-{second_vertex}" in visited or f"{second_vertex}-{vertex}" in visited:
+            continue
+
+          betweenness = self.Dijkstra(vertex, second_vertex)
+
+          if target in betweenness:
+            occurrences += 1
+
+          caminhos.append(betweenness)
+          visited.append(f"{vertex}-{second_vertex}")
+
+    return (occurrences * occurrences - 1 / 2)
